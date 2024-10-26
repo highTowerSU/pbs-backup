@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # -----------------------------------------------------------------------------
-# generate_banner.sh
+# backup_pbs.sh
 # Copyright (C) 2023 highTowerSU
 #
 # Repository: https://github.com/highTowerSU/pbs-backup
