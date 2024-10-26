@@ -1,5 +1,31 @@
 #!/bin/bash
 
+# -----------------------------------------------------------------------------
+# install_backup_pbs.sh
+# Copyright (C) 2023 highTowerSU
+#
+# Repository: https://github.com/highTowerSU/pbs-backup
+#
+# Description: This script installs the backup script for Proxmox and its 
+# configuration files. It places the backup script in the appropriate directory 
+# (`/usr/local/bin`), creates a configuration file in `/etc/`, and offers to 
+# modify SSH settings as needed. Non-interactive mode is supported via 
+# the `--noninteractive` parameter.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# -----------------------------------------------------------------------------
+
 # Installationspfade
 BACKUP_SCRIPT="/usr/local/bin/backup_pbs.sh"
 NOVALID_SCRIPT="/usr/local/bin/remove_no_valid_proxmox.sh"
