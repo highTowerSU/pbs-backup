@@ -11,7 +11,7 @@ sudo cp backup_pbs.sh "$BACKUP_SCRIPT"
 sudo chmod +x "$BACKUP_SCRIPT"
 
 # Skript kopieren
-echo "Installing backup script to $NOVALID_SCRIPT..."
+echo "Installing novalid script to $NOVALID_SCRIPT..."
 sudo cp remove_no_valid_proxmox.sh "$NOVALID_SCRIPT"
 sudo chmod +x "$NOVALID_SCRIPT"
 
