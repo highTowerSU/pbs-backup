@@ -12,7 +12,7 @@ sudo cp backup_pbs.sh "$BACKUP_SCRIPT"
 sudo chmod +x "$BACKUP_SCRIPT"
 
 # Abfrage, ob das Skript novalid installiert werden soll
-echo "Do you want to install novalid script? (y/n): "
+echo -n "Do you want to install novalid script? (y/n): "
 read install_novalid
 if [[ "$install_novalid" == "y" || "$install_novalid" == "Y" ]]; then
     # Skript kopieren
@@ -21,7 +21,7 @@ if [[ "$install_novalid" == "y" || "$install_novalid" == "Y" ]]; then
     sudo chmod +x "$NOVALID_SCRIPT"
 
     # Abfrage, ob der Symlink erstellt werden soll
-    echo "Do you want to create a symlink for daily cron? (y/n): "
+    echo -n "Do you want to create a symlink for daily cron? (y/n): "
     read create_symlink
     if [[ "$create_symlink" == "y" || "$create_symlink" == "Y" ]]; then
         echo "Creating symlink at $SYMLINK_PATH..."
