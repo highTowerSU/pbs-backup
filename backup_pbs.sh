@@ -12,11 +12,15 @@ else
     exit 1
 fi
 
+export PBS_REPOSITORY
+export PBS_PASSWORD
+export PBS_FINGERPRINT
+
 # Überprüfung, ob das Backup-Tool installiert ist
 if command -v proxmox-backup-client >/dev/null 2>&1; then
     # Backup starten, falls das Tool vorhanden ist
     proxmox-backup-client login
-    proxmox-backup-client backup \$PBS_ARCHIVES --ns "\$PBS_NS"
+    proxmox-backup-client backup $PBS_ARCHIVES --ns "$PBS_NS"
 else
     # Fehlermeldung anzeigen, falls das Tool fehlt
     cat <<EOF
