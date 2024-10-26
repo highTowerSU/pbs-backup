@@ -32,24 +32,93 @@ NOVALID_SCRIPT="/usr/local/bin/remove_no_valid_proxmox.sh"
 SYMLINK_PATH="/etc/cron.daily/remove-no-valid-proxmox"
 CONFIG_FILE="/etc/backup_pbs.conf"
 
+# Standard-Parameter
+NONINTERACTIVE=false
+NOVALID=false
+CONFIGURE_SSHD=false
+CRON=false
+
+# Hilfe anzeigen
+function show_help {
+    echo "Usage: $0 [options]"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help                Show this help message and exit"
+    echo "      --noninteractive      Run in non-interactive mode"
+    echo "  -n, --novalid             Skip Proxmox enterprise warning installation"
+    echo "  -s, --configure-sshd      Apply sshd_config modifications"
+    echo "  -c, --cron                Set up a cron job for regular execution"
+    echo ""
+    echo "Example:"
+    echo "  $0 --noninteractive --novalid --configure-sshd"
+}
+
+# Argumente parsen
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -b|--noninteractive)
+            NONINTERACTIVE=true
+            shift
+            ;;
+        -n|--novalid)
+            NOVALID=true
+            shift
+            ;;
+        -s|--configure-sshd)
+            CONFIGURE_SSHD=true
+            shift
+            ;;
+        -c|--cron)
+            CRON=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
 # Skript kopieren
 echo "Installing backup script to $BACKUP_SCRIPT..."
 sudo cp backup_pbs.sh "$BACKUP_SCRIPT"
 sudo chmod +x "$BACKUP_SCRIPT"
 
-# Abfrage, ob das Skript novalid installiert werden soll
-echo -n "Do you want to install novalid script? (y/n): "
-read install_novalid
-if [[ "$install_novalid" == "y" || "$install_novalid" == "Y" ]]; then
-    # Skript kopieren
+# Prüfen, ob --novalid gesetzt ist oder interaktiv nachfragen
+install_novalid=false
+if $NOVALID || $NONINTERACTIVE; then
+    install_novalid=true
+elif ! $NOVALID && ! $NONINTERACTIVE; then
+    echo -n "Do you want to install the novalid script? (y/n): "
+    read install_novalid_response
+    if [[ "$install_novalid_response" == "y" || "$install_novalid_response" == "Y" ]]; then
+        install_novalid=true
+    fi
+fi
+
+if $install_novalid; then
     echo "Installing novalid script to $NOVALID_SCRIPT..."
     sudo cp remove_no_valid_proxmox.sh "$NOVALID_SCRIPT"
     sudo chmod +x "$NOVALID_SCRIPT"
 
-    # Abfrage, ob der Symlink erstellt werden soll
-    echo -n "Do you want to create a symlink for daily cron? (y/n): "
-    read create_symlink
-    if [[ "$create_symlink" == "y" || "$create_symlink" == "Y" ]]; then
+    # Prüfen auf --cron oder interaktiv nachfragen für den Symlink
+    create_symlink=false
+    if $CRON || $NONINTERACTIVE; then
+        create_symlink=true
+    elif ! $CRON && ! $NONINTERACTIVE; then
+        echo -n "Do you want to create a symlink for daily cron? (y/n): "
+        read create_symlink_response
+        if [[ "$create_symlink_response" == "y" || "$create_symlink_response" == "Y" ]]; then
+            create_symlink=true
+        fi
+    fi
+
+    if $create_symlink; then
         echo "Creating symlink at $SYMLINK_PATH..."
         ln -sf "$NOVALID_SCRIPT" "$SYMLINK_PATH"
         echo "Symlink created."
