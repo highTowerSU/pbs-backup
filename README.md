@@ -24,6 +24,7 @@ Add to cron:
 ### Exclusions for WSL
 
 If you're running this on WSL, you may want to exclude the following directories:
+nano /.pxarexclude
 
 ```
 /proc/
