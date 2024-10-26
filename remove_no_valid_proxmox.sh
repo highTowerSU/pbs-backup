@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # -----------------------------------------------------------------------------
-# generate_banner.sh
+# remove_no_valid_proxmox.sh
 # Copyright (C) 2023 highTowerSU
 #
 # Repository: https://github.com/highTowerSU/pbs-backup
