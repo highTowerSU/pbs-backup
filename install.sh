@@ -47,10 +47,10 @@ function show_help {
     echo ""
     echo "Options:"
     echo "  -h, --help                  Show this help message and exit"
-    echo "  -d, --backup-cron           Set up a cron job for backup script"
-    echo "  -m, --cron-novalid          Set up a cron job for regular execution"
+    echo "  -b, --backup-cron           Set up a cron job for backup script"
     echo "  -n, --noninteractive        Run in non-interactive mode"
     echo "  -s, --configure-sshd        Apply sshd_config modifications"
+    echo "  -v, --cron-novalid          Set up a cron job for regular execution"
     echo "  -w, --with-novalid-warning  'Skip Proxmox enterprise warning' script installation"
     echo ""
     echo "Example:"
@@ -64,12 +64,8 @@ while [[ $# -gt 0 ]]; do
             show_help
             exit 0
             ;;
-        -d|--backup-cron)
+        -b|--backup-cron)
             BACKUP_CRON=true
-            shift
-            ;;
-        -m|--cron-novalid)
-            CRON=true
             shift
             ;;
         -n|--noninteractive)
@@ -79,6 +75,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -s|--configure-sshd)
             CONFIGURE_SSHD=true
+            shift
+            ;;
+        -v|--cron-novalid)
+            CRON=true
             shift
             ;;
         -w|--with-novalid-warning)
