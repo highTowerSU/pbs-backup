@@ -106,6 +106,8 @@ if [ ! -f "$CONFIG_FILE" ]; then
 else
     echo "$CONFIG_FILE already exists. Skipping copy."
 fi
+echo "Copying configuration template to ${CONFIG_FILE}.dist..."
+cp backup_pbs.conf "${CONFIG_PATH}.dist"
 
 set_backup_cron=false
 if $BACKUP_CRON; then
