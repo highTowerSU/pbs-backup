@@ -31,12 +31,15 @@ BACKUP_SCRIPT="/usr/local/bin/backup_pbs.sh"
 NOVALID_SCRIPT="/usr/local/bin/remove_no_valid_proxmox.sh"
 SYMLINK_PATH="/etc/cron.daily/remove-no-valid-proxmox"
 CONFIG_FILE="/etc/backup_pbs.conf"
+CRON_FILE="/etc/cron.d/backup_pbs"
+
 
 # Standard-Parameter
 NONINTERACTIVE=false
 NOVALID=false
 CONFIGURE_SSHD=false
 CRON=false
+BACKUP_CRON=false
 
 # Hilfe anzeigen
 function show_help {
@@ -45,12 +48,13 @@ function show_help {
     echo "Options:"
     echo "  -h, --help                Show this help message and exit"
     echo "  -b, --noninteractive      Run in non-interactive mode"
-    echo "  -n, --novalid             Skip Proxmox enterprise warning installation"
+    echo "  -c, --backup-cron         Set up a cron job for backup script"
+    echo "  -m, --cron-novalid        Set up a cron job for regular execution"
+    echo "  -n, --with-novalid        Skip Proxmox enterprise warning installation"
     echo "  -s, --configure-sshd      Apply sshd_config modifications"
-    echo "  -c, --cron                Set up a cron job for regular execution"
     echo ""
     echo "Example:"
-    echo "  $0 --noninteractive --novalid --configure-sshd"
+    echo "  $0 --noninteractive  --backup-cron --with-novalid --configure-sshd"
 }
 
 # Argumente parsen
@@ -64,6 +68,14 @@ while [[ $# -gt 0 ]]; do
             NONINTERACTIVE=true
             shift
             ;;
+        -c|--backup-cron)
+            BACKUP_CRON=true
+            shift
+            ;;
+        -m|--cron-novalid)
+            CRON=true
+            shift
+            ;;
         -n|--novalid)
             NOVALID=true
             shift
@@ -72,10 +84,7 @@ while [[ $# -gt 0 ]]; do
             CONFIGURE_SSHD=true
             shift
             ;;
-        -c|--cron)
-            CRON=true
-            shift
-            ;;
+
         *)
             echo "Unknown option: $1"
             show_help
@@ -88,6 +97,34 @@ done
 echo "Installing backup script to $BACKUP_SCRIPT..."
 sudo cp backup_pbs.sh "$BACKUP_SCRIPT"
 sudo chmod +x "$BACKUP_SCRIPT"
+
+# Konfigurationsdatei kopieren
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Copying configuration file to $CONFIG_FILE..."
+    sudo cp backup_pbs.conf "$CONFIG_FILE"
+    echo "Please edit $CONFIG_FILE to set up your Proxmox Backup settings."
+else
+    echo "$CONFIG_FILE already exists. Skipping copy."
+fi
+
+set_backup_cron=false
+if $BACKUP_CRON || $NONINTERACTIVE; then
+    set_backup_cron=true
+elif ! $BACKUP_CRON && ! $NONINTERACTIVE; then
+    echo -n "Do you want to create a cron job for backup script? (y/n): "
+    read backup_cron_response
+    if [[ "$backup_cron_response" == "y" || "$backup_cron_response" == "Y" ]]; then
+        set_backup_cron=true
+    fi
+fi
+
+if $set_backup_cron; then
+    echo "Setting up cron job for backup script at $CRON_FILE..."
+    echo "30 23 * * * root $BACKUP_SCRIPT" | sudo tee "$CRON_FILE" > /dev/null
+    echo "Backup cron job created."
+else
+    echo "Backup cron job creation skipped."
+fi
 
 # Prüfen, ob --novalid gesetzt ist oder interaktiv nachfragen
 install_novalid=false
@@ -127,15 +164,6 @@ if $install_novalid; then
     fi
 else
     echo "Install novalid script skipped."
-fi
-
-# Konfigurationsdatei kopieren
-if [ ! -f "$CONFIG_FILE" ]; then
-    echo "Copying configuration file to $CONFIG_FILE..."
-    sudo cp backup_pbs.conf "$CONFIG_FILE"
-    echo "Please edit $CONFIG_FILE to set up your Proxmox Backup settings."
-else
-    echo "$CONFIG_FILE already exists. Skipping copy."
 fi
 
 echo "Installation complete. Run $BACKUP_SCRIPT to start the backup."
