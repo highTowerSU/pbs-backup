@@ -9,6 +9,8 @@ This script automates the backup of Proxmox data to a designated Proxmox Backup 
 
 ## Installation
 
+### Option 1: Install via Git
+
 1. **Clone the repository** and navigate to the project folder:
    ```bash
    git clone https://github.com/highTowerSU/pbs-backup.git
@@ -17,7 +19,7 @@ This script automates the backup of Proxmox data to a designated Proxmox Backup 
 
 2. **Run the installation script** to copy files to the appropriate locations:
    ```bash
-   sudo bash install_backup_pbs.sh
+   sudo bash ./install.sh
    ```
    This will:
    - Copy the main script to `/usr/local/bin/backup_pbs.sh`
@@ -31,6 +33,13 @@ This script automates the backup of Proxmox data to a designated Proxmox Backup 
    PBS_REPOSITORY='user@server@hostname:backup'
    PBS_NS='your_namespace_here'
    PBS_ARCHIVES='root.pxar:/ c.pxar:/mnt/c/'
+   ```
+
+### Option 2: One-Line Web Install
+
+Run this command to download and execute the install script directly (options from install sh working):
+   ```bash
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/highTowerSU/pbs-backup/main/webinstall.sh)"
    ```
 
 ## Usage
