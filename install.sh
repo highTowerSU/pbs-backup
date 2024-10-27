@@ -37,7 +37,6 @@ CRON_FILE="/etc/cron.d/backup_pbs"
 # Standard-Parameter
 NONINTERACTIVE=false
 NOVALID=false
-CONFIGURE_SSHD=false
 CRON=false
 BACKUP_CRON=false
 
@@ -49,12 +48,11 @@ function show_help {
     echo "  -h, --help                  Show this help message and exit"
     echo "  -b, --backup-cron           Set up a cron job for backup script"
     echo "  -n, --noninteractive        Run in non-interactive mode"
-    echo "  -s, --configure-sshd        Apply sshd_config modifications"
     echo "  -v, --cron-novalid          Set up a cron job for regular execution"
     echo "  -w, --with-novalid-warning  'Skip Proxmox enterprise warning' script installation"
     echo ""
     echo "Example:"
-    echo "  $0 --noninteractive  --backup-cron --with-novalid-warning --configure-sshd"
+    echo "  $0 --noninteractive  --backup-cron --with-novalid-warning --cron-novalid"
 }
 
 # Argumente parsen
@@ -72,10 +70,6 @@ while [[ $# -gt 0 ]]; do
             NONINTERACTIVE=true
             shift
             echo "switched to noninteractive-Mode"
-            ;;
-        -s|--configure-sshd)
-            CONFIGURE_SSHD=true
-            shift
             ;;
         -v|--cron-novalid)
             CRON=true
