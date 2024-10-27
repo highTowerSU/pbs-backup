@@ -48,7 +48,7 @@ function show_help {
     echo "Options:"
     echo "  -h, --help                Show this help message and exit"
     echo "  -b, --noninteractive      Run in non-interactive mode"
-    echo "  -c, --backup-cron         Set up a cron job for backup script"
+    echo "  -d, --backup-cron         Set up a cron job for backup script"
     echo "  -m, --cron-novalid        Set up a cron job for regular execution"
     echo "  -n, --with-novalid        Skip Proxmox enterprise warning installation"
     echo "  -s, --configure-sshd      Apply sshd_config modifications"
@@ -68,7 +68,7 @@ while [[ $# -gt 0 ]]; do
             NONINTERACTIVE=true
             shift
             ;;
-        -c|--backup-cron)
+        -d|--backup-cron)
             BACKUP_CRON=true
             shift
             ;;
