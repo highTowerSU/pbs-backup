@@ -57,6 +57,8 @@ function show_help {
     echo "  $0 --noninteractive  --backup-cron --with-novalid --configure-sshd"
 }
 
+echo "ARGS: $#"
+
 # Argumente parsen
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -67,7 +69,7 @@ while [[ $# -gt 0 ]]; do
         -b|--noninteractive)
             NONINTERACTIVE=true
             shift
-            echo switched to noninteractive-Mode
+            echo "switched to noninteractive-Mode"
             ;;
         -d|--backup-cron)
             BACKUP_CRON=true
