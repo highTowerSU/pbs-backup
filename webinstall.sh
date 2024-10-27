@@ -43,6 +43,7 @@ git clone https://github.com/highTowerSU/pbs-backup.git "$TEMP_DIR"
 if [ -f "$TEMP_DIR/install.sh" ]; then
     chmod +x "$TEMP_DIR/install.sh"
     cd $TEMP_DIR
+    echo "running: ./install.sh $@"
     "./install.sh" "$@"
     cd ..
 else
