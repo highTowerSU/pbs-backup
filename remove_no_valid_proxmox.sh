@@ -2,7 +2,7 @@
 
 # -----------------------------------------------------------------------------
 # remove_no_valid_proxmox.sh
-# Copyright (C) 2023 highTowerSU
+# Copyright (C) 2021-2024 highTowerSU
 #
 # Repository: https://github.com/highTowerSU/pbs-backup
 #
