@@ -108,9 +108,9 @@ else
 fi
 
 set_backup_cron=false
-if $BACKUP_CRON || $NONINTERACTIVE; then
+if $BACKUP_CRON; then
     set_backup_cron=true
-elif ! $BACKUP_CRON && ! $NONINTERACTIVE; then
+elif ! $NONINTERACTIVE; then
     echo -n "Do you want to create a cron job for backup script? (y/n): "
     read backup_cron_response
     if [[ "$backup_cron_response" == "y" || "$backup_cron_response" == "Y" ]]; then
@@ -128,9 +128,9 @@ fi
 
 # Prüfen, ob --novalid gesetzt ist oder interaktiv nachfragen
 install_novalid=false
-if $NOVALID || $NONINTERACTIVE; then
+if $NOVALID; then
     install_novalid=true
-elif ! $NOVALID && ! $NONINTERACTIVE; then
+elif ! $NONINTERACTIVE; then
     echo -n "Do you want to install the novalid script? (y/n): "
     read install_novalid_response
     if [[ "$install_novalid_response" == "y" || "$install_novalid_response" == "Y" ]]; then
@@ -145,9 +145,9 @@ if $install_novalid; then
 
     # Prüfen auf --cron oder interaktiv nachfragen für den Symlink
     create_symlink=false
-    if $CRON || $NONINTERACTIVE; then
+    if $CRON; then
         create_symlink=true
-    elif ! $CRON && ! $NONINTERACTIVE; then
+    elif ! $NONINTERACTIVE; then
         echo -n "Do you want to create a symlink for daily cron? (y/n): "
         read create_symlink_response
         if [[ "$create_symlink_response" == "y" || "$create_symlink_response" == "Y" ]]; then
