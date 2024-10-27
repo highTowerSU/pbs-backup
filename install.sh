@@ -57,8 +57,6 @@ function show_help {
     echo "  $0 --noninteractive  --backup-cron --with-novalid-warning --configure-sshd"
 }
 
-echo "ARGS: $#"
-
 # Argumente parsen
 while [[ $# -gt 0 ]]; do
     case "$1" in
