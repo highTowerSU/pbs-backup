@@ -37,7 +37,7 @@ fi
 
 # Temporäres Verzeichnis erstellen und Repository klonen
 TEMP_DIR=$(mktemp -d)
-git clone https://github.com/highTowerSU/custom-ssh-banner.git "$TEMP_DIR"
+git clone https://github.com/highTowerSU/pbs-backup.git "$TEMP_DIR"
 
 # Sicherstellen, dass install.sh existiert und ausführbar ist
 if [ -f "$TEMP_DIR/install.sh" ]; then
