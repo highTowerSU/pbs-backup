@@ -44,7 +44,7 @@ function show_help {
     echo ""
     echo "Options:"
     echo "  -h, --help                Show this help message and exit"
-    echo "      --noninteractive      Run in non-interactive mode"
+    echo "  -b, --noninteractive      Run in non-interactive mode"
     echo "  -n, --novalid             Skip Proxmox enterprise warning installation"
     echo "  -s, --configure-sshd      Apply sshd_config modifications"
     echo "  -c, --cron                Set up a cron job for regular execution"
