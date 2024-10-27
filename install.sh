@@ -111,7 +111,7 @@ set_backup_cron=false
 if $BACKUP_CRON; then
     set_backup_cron=true
 elif ! $NONINTERACTIVE; then
-    echo -n "Do you want to create a cron job for backup script? (y/n): "
+    echo -n "Do you want to create a cron job for backup script? (y/N): "
     read backup_cron_response
     if [[ "$backup_cron_response" == "y" || "$backup_cron_response" == "Y" ]]; then
         set_backup_cron=true
@@ -131,7 +131,7 @@ install_novalid=false
 if $NOVALID; then
     install_novalid=true
 elif ! $NONINTERACTIVE; then
-    echo -n "Do you want to install the novalid script? (y/n): "
+    echo -n "Do you want to install the novalid script? (y/N): "
     read install_novalid_response
     if [[ "$install_novalid_response" == "y" || "$install_novalid_response" == "Y" ]]; then
         install_novalid=true
@@ -148,7 +148,7 @@ if $install_novalid; then
     if $CRON; then
         create_symlink=true
     elif ! $NONINTERACTIVE; then
-        echo -n "Do you want to create a symlink for daily cron? (y/n): "
+        echo -n "Do you want to create a symlink for daily cron? (y/N): "
         read create_symlink_response
         if [[ "$create_symlink_response" == "y" || "$create_symlink_response" == "Y" ]]; then
             create_symlink=true
