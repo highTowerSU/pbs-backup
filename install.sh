@@ -51,7 +51,7 @@ function show_help {
     echo "  -m, --cron-novalid          Set up a cron job for regular execution"
     echo "  -n, --noninteractive        Run in non-interactive mode"
     echo "  -s, --configure-sshd        Apply sshd_config modifications"
-    echo "  -w, --with-novalid-warning  Skip Proxmox enterprise warning installation"
+    echo "  -w, --with-novalid-warning  'Skip Proxmox enterprise warning' script installation"
     echo ""
     echo "Example:"
     echo "  $0 --noninteractive  --backup-cron --with-novalid-warning --configure-sshd"
