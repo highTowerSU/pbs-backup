@@ -46,15 +46,15 @@ function show_help {
     echo "Usage: $0 [options]"
     echo ""
     echo "Options:"
-    echo "  -h, --help                Show this help message and exit"
-    echo "  -b, --noninteractive      Run in non-interactive mode"
-    echo "  -d, --backup-cron         Set up a cron job for backup script"
-    echo "  -m, --cron-novalid        Set up a cron job for regular execution"
-    echo "  -n, --with-novalid        Skip Proxmox enterprise warning installation"
-    echo "  -s, --configure-sshd      Apply sshd_config modifications"
+    echo "  -h, --help                  Show this help message and exit"
+    echo "  -d, --backup-cron           Set up a cron job for backup script"
+    echo "  -m, --cron-novalid          Set up a cron job for regular execution"
+    echo "  -n, --noninteractive        Run in non-interactive mode"
+    echo "  -s, --configure-sshd        Apply sshd_config modifications"
+    echo "  -w, --with-novalid-warning  Skip Proxmox enterprise warning installation"
     echo ""
     echo "Example:"
-    echo "  $0 --noninteractive  --backup-cron --with-novalid --configure-sshd"
+    echo "  $0 --noninteractive  --backup-cron --with-novalid-warning --configure-sshd"
 }
 
 echo "ARGS: $#"
@@ -66,11 +66,6 @@ while [[ $# -gt 0 ]]; do
             show_help
             exit 0
             ;;
-        -b|--noninteractive)
-            NONINTERACTIVE=true
-            shift
-            echo "switched to noninteractive-Mode"
-            ;;
         -d|--backup-cron)
             BACKUP_CRON=true
             shift
@@ -79,12 +74,17 @@ while [[ $# -gt 0 ]]; do
             CRON=true
             shift
             ;;
-        -n|--novalid)
-            NOVALID=true
+        -n|--noninteractive)
+            NONINTERACTIVE=true
             shift
+            echo "switched to noninteractive-Mode"
             ;;
         -s|--configure-sshd)
             CONFIGURE_SSHD=true
+            shift
+            ;;
+        -w|--with-novalid-warning)
+            NOVALID=true
             shift
             ;;
 
