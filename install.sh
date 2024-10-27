@@ -67,6 +67,7 @@ while [[ $# -gt 0 ]]; do
         -b|--noninteractive)
             NONINTERACTIVE=true
             shift
+            echo switched to noninteractive-Mode
             ;;
         -d|--backup-cron)
             BACKUP_CRON=true
