@@ -122,7 +122,7 @@ fi
 
 if $set_backup_cron; then
     echo "Setting up cron job for backup script at $CRON_FILE..."
-    echo "$BACKUP_CRON_TIME root $BACKUP_SCRIPT >/dev/null" | sudo tee "$CRON_FILE" > /dev/null
+    echo "$BACKUP_CRON_TIME root $BACKUP_SCRIPT -q" | sudo tee "$CRON_FILE" > /dev/null
     echo "Backup cron job created."
 else
     echo "Backup cron job creation skipped."
