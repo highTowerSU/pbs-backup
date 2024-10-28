@@ -54,7 +54,7 @@ function show_help {
     echo "  -w, --with-novalid-warning  'Skip Proxmox enterprise warning' script installation"
     echo ""
     echo "Example:"
-    echo "  $0 --noninteractive  --backup-cron --with-novalid-warning --cron-novalid"
+    echo "  $0 --noninteractive --backup-cron --backup-cron-time <'23 30 * * *'> --with-novalid-warning --cron-novalid"
 }
 
 # Argumente parsen
