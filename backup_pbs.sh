@@ -22,14 +22,61 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 # -----------------------------------------------------------------------------
 
+PBS_LOG="info"
+NONINTERACTIVE=false
+QUIET=false
+CONFIG_PATH=/etc/backup_pbs.conf
+
 # Konfigurationsdatei laden
-if [ -f /etc/backup_pbs.conf ]; then
-    source /etc/backup_pbs.conf
+if [ -f "$CONFIG_PATH" ]; then
+    source "$CONFIG_PATH"
 else
-    echo "Error: Configuration file /etc/backup_pbs.conf not found."
+    echo "Error: Configuration file $CONFIG_PATH not found."
     exit 1
 fi
 
+# Hilfe anzeigen
+function show_help {
+    echo "Usage: $0 [options]"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help                Show this help message and exit"
+#    echo "  -b, --noninteractive      Run in non-interactive mode"
+    echo "  -q, --quiet               Show only error messages"
+    echo ""
+    echo "Example:"
+    echo "  $0 --noninteractive --modify-sshd-conf"
+}
+
+# Argumente parsen
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -b|--noninteractive)
+            NONINTERACTIVE=true
+            shift
+            ;;
+        -q|--quiet)
+            QUIET=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1" >/dev/stderr
+            show_help >/dev/stderr
+            exit 1
+            ;;
+    esac
+done
+
+if $QUIET; then
+    exec > /dev/null
+    PBS_LOG="error"
+fi
+
+export PBS_LOG
 export PBS_REPOSITORY
 export PBS_PASSWORD
 export PBS_FINGERPRINT
