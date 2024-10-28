@@ -39,6 +39,7 @@ NONINTERACTIVE=false
 NOVALID=false
 CRON=false
 BACKUP_CRON=false
+BACKUP_CRON_TIME="30 23 * * *"
 
 # Hilfe anzeigen
 function show_help {
@@ -47,6 +48,7 @@ function show_help {
     echo "Options:"
     echo "  -h, --help                  Show this help message and exit"
     echo "  -b, --backup-cron           Set up a cron job for backup script"
+    echo "  -c, --backup-cron-time      Set up a cron job for backup script at <23 30 * * *>"
     echo "  -n, --noninteractive        Run in non-interactive mode"
     echo "  -v, --cron-novalid          Set up a cron job for regular execution"
     echo "  -w, --with-novalid-warning  'Skip Proxmox enterprise warning' script installation"
@@ -66,6 +68,10 @@ while [[ $# -gt 0 ]]; do
             BACKUP_CRON=true
             shift
             ;;
+        -c|--backup-cron-time)
+            BACKUP_CRON_TIME=$2
+            shift 2
+            ;;
         -n|--noninteractive)
             NONINTERACTIVE=true
             shift
@@ -79,7 +85,6 @@ while [[ $# -gt 0 ]]; do
             NOVALID=true
             shift
             ;;
-
         *)
             echo "Unknown option: $1"
             show_help
@@ -117,7 +122,7 @@ fi
 
 if $set_backup_cron; then
     echo "Setting up cron job for backup script at $CRON_FILE..."
-    echo "30 23 * * * root $BACKUP_SCRIPT >/dev/null" | sudo tee "$CRON_FILE" > /dev/null
+    echo "$BACKUP_CRON_TIME root $BACKUP_SCRIPT >/dev/null" | sudo tee "$CRON_FILE" > /dev/null
     echo "Backup cron job created."
 else
     echo "Backup cron job creation skipped."
