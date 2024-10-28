@@ -36,7 +36,7 @@ export PBS_FINGERPRINT
 
 # Überprüfung, ob das Backup-Tool installiert ist
 if command -v proxmox-backup-client >/dev/null 2>&1; then
-    # Backup starten, falls das Tool vorhanden ist
+    # Backup starten
     proxmox-backup-client login
     proxmox-backup-client backup $PBS_ARCHIVES --ns "$PBS_NS"
 else
