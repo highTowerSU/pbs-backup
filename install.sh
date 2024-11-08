@@ -28,6 +28,7 @@
 
 # Installationspfade
 BACKUP_SCRIPT="/usr/local/bin/backup_pbs.sh"
+SYNC_SCRIPT="/usr/local/bin/pbs_ad_sync.sh"
 NOVALID_SCRIPT="/usr/local/bin/remove_no_valid_proxmox.sh"
 SYMLINK_PATH="/etc/cron.daily/remove-no-valid-proxmox"
 CONFIG_FILE="/etc/backup_pbs.conf"
