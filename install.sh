@@ -32,6 +32,9 @@ NOVALID_SCRIPT="/usr/local/bin/remove_no_valid_proxmox.sh"
 SYMLINK_PATH="/etc/cron.daily/remove-no-valid-proxmox"
 CONFIG_FILE="/etc/backup_pbs.conf"
 CRON_FILE="/etc/cron.d/backup_pbs"
+SYNC_CONFIG_FILE="/etc/pbs_ad_sync.conf"
+SYNC_CRON_FILE="/etc/cron.d/pbs_ad_sync"
+
 
 
 # Standard-Parameter
@@ -40,6 +43,7 @@ NOVALID=false
 CRON=false
 BACKUP_CRON=false
 BACKUP_CRON_TIME="30 23 * * *"
+SYNC_CRON_TIME="0 2 * * *"
 
 # Hilfe anzeigen
 function show_help {
@@ -49,12 +53,14 @@ function show_help {
     echo "  -h, --help                  Show this help message and exit"
     echo "  -b, --backup-cron           Set up a cron job for backup script"
     echo "  -c, --backup-cron-time      Set up a cron job for backup script at <23 30 * * *>"
+    echo "  -s, --sync-cron             Set up a cron job for the sync script"
+    echo "  -t, --sync-cron-time        Set custom cron time for the sync script at <'0 2 * * *'>"
     echo "  -n, --noninteractive        Run in non-interactive mode"
     echo "  -v, --cron-novalid          Set up a cron job for regular execution"
     echo "  -w, --with-novalid-warning  'Skip Proxmox enterprise warning' script installation"
     echo ""
     echo "Example:"
-    echo "  $0 --noninteractive --backup-cron --backup-cron-time <'23 30 * * *'> --with-novalid-warning --cron-novalid"
+    echo "  $0 --noninteractive --backup-cron --backup-cron-time <'23 30 * * *'> --sync-cron --sync-cron-time <'0 2 * * *'> --with-novalid-warning --cron-novalid"
 }
 
 # Argumente parsen
@@ -70,6 +76,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         -c|--backup-cron-time)
             BACKUP_CRON_TIME=$2
+            shift 2
+            ;;
+        -s|--sync-cron)
+            SYNC_CRON=true
+            shift
+            ;;
+        -t|--sync-cron-time)
+            SYNC_CRON_TIME=$2
             shift 2
             ;;
         -n|--noninteractive)
@@ -98,6 +112,11 @@ echo "Installing backup script to $BACKUP_SCRIPT..."
 sudo cp backup_pbs.sh "$BACKUP_SCRIPT"
 sudo chmod +x "$BACKUP_SCRIPT"
 
+# Install sync script
+echo "Installing sync script to $SYNC_SCRIPT..."
+sudo cp pbs_ad_sync.sh "$SYNC_SCRIPT"
+sudo chmod +x "$SYNC_SCRIPT"
+
 # Konfigurationsdatei kopieren
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Copying configuration file to $CONFIG_FILE..."
@@ -108,6 +127,15 @@ else
 fi
 echo "Copying configuration template to ${CONFIG_FILE}.dist..."
 cp backup_pbs.conf "${CONFIG_PATH}.dist"
+
+if [ ! -f "$SYNC_CONFIG_FILE" ]; then
+    echo "Copying sync configuration file to $SYNC_CONFIG_FILE..."
+    sudo cp pbs_ad_sync.conf "$SYNC_CONFIG_FILE"
+else
+    echo "$SYNC_CONFIG_FILE already exists. Skipping copy."
+fi
+echo "Copying configuration template to ${SYNC_CONFIG_FILE}.dist..."
+cp pbs_ad_sync.conf "${SYNC_CONFIG_FILE}.dist"
 
 set_backup_cron=false
 if $BACKUP_CRON; then
@@ -127,6 +155,29 @@ if $set_backup_cron; then
 else
     echo "Backup cron job creation skipped."
 fi
+
+
+# Set up sync cron job
+set_sync_cron=false
+if $SYNC_CRON; then
+    set_sync_cron=true
+elif ! $NONINTERACTIVE; then
+    echo -n "Do you want to create a cron job for the sync script? (y/N): "
+    read sync_cron_response
+    if [[ "$sync_cron_response" == "y" || "$sync_cron_response" == "Y" ]]; then
+        set_sync_cron=true
+    fi
+fi
+
+if $set_sync_cron; then
+    echo "Setting up cron job for sync script at $SYNC_CRON_FILE..."
+    echo "$SYNC_CRON_TIME root $SYNC_SCRIPT -q" | sudo tee "$SYNC_CRON_FILE" > /dev/null
+    echo "Sync cron job created."
+else
+    echo "Sync cron job creation skipped."
+fi
+
+
 
 # Prüfen, ob --novalid gesetzt ist oder interaktiv nachfragen
 install_novalid=false
