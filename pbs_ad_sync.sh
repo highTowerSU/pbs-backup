@@ -130,14 +130,14 @@ fi
 # Synchronisation und/oder ACL-Zuweisung durchführen, falls nicht übersprungen
 if ! $NOSYNC; then
     echo "Synchronizing with Active Directory..."
-    proxmox-backup-manager ad sync "${domain#@}"
+    proxmox-backup-manager ad sync "${AD_DOMAIN}"
     echo "Synchronization complete."
 fi
 
 if ! $NOACLS && ! $NOSYNC; then
     # Benutzerliste abrufen und filtern
     users_json=$(proxmox-backup-manager user list --output-format json-pretty)
-    user_ids=$(echo "$users_json" | jq -r --arg domain "$domain" '.[] | select(.userid | endswith($domain)) | .userid')
+    user_ids=$(echo "$users_json" | jq -r --arg domain "@$AD_DOMAIN" '.[] | select(.userid | endswith(@$AD_DOMAIN)) | .userid')
 
     # Admin-Rolle für jeden Benutzer zuweisen
     while IFS= read -r userid; do
