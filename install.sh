@@ -172,7 +172,7 @@ fi
 
 if $set_sync_cron; then
     echo "Setting up cron job for sync script at $SYNC_CRON_FILE..."
-    echo "$SYNC_CRON_TIME root $SYNC_SCRIPT -q" | sudo tee "$SYNC_CRON_FILE" > /dev/null
+    echo "$SYNC_CRON_TIME root $SYNC_SCRIPT -b -q" | sudo tee "$SYNC_CRON_FILE" > /dev/null
     echo "Sync cron job created."
 else
     echo "Sync cron job creation skipped."
